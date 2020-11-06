@@ -30,6 +30,9 @@ const Layout = ({ children }) => {
       <link rel="stylesheet" href="/static/css/styles.css" />
     </Head>
   );
+  const divstyle = {
+    display: "flex",
+  };
 
   const nav = () => (
     <ul className="nav nav-tabs bg-info">
@@ -40,18 +43,18 @@ const Layout = ({ children }) => {
       </li>
 
       {!isAuth() && (
-        <React.Fragment>
-          <li className="nav-item">
+        <div style={divstyle}>
+          <div className="nav-item inline">
             <Link href="/login">
-              <a className="nav-link text-dark">Login</a>
+              <a className="nav-link text-dark inline">Login</a>
             </Link>
-          </li>
-          <li className="nav-item">
+          </div>
+          <div className="nav-item inline">
             <Link href="/register">
-              <a className="nav-link text-dark">Register</a>
+              <a className="nav-link text-dark inline">Register</a>
             </Link>
-          </li>
-        </React.Fragment>
+          </div>
+        </div>
       )}
 
       {/* It is isAuth() && not isAuth - which will give terrible error */}

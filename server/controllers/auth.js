@@ -1,9 +1,11 @@
 const User = require("../models/user");
 const AWS = require("aws-sdk");
-const jwt = require("jsonwebtoken");
+const jwt = require("jsonwebtoken"); // used for signing, verifying & decoding
+// express-jwt is used to check the validity of *token from headers* by performing series of validations & the decoded info will be available to us in *req.user* by default
 const { registerEmailParams } = require("../helpers/email");
 const { default: ShortUniqueId } = require("short-unique-id");
 const uid = new ShortUniqueId();
+const expressJWT = require("express-jwt");
 
 AWS.config.update({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -111,6 +113,7 @@ exports.login = async (req, res) => {
 
   // generate token and send to client
   const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+    // as the payload is *id only* when the token decoded by *express-jwt* , *id* will be available to us as *req.user.id*
     expiresIn: "7d", // expire after 7 days
   });
 
@@ -119,5 +122,44 @@ exports.login = async (req, res) => {
   return res.json({
     token,
     user: { _id, name, email, role },
+  });
+};
+
+// looks for token in the headers & decodes and adds the decodedInfo(payload passed during signing in) in *req.user*
+exports.requireSignIn = expressJWT({
+  secret: process.env.JWT_SECRET,
+  algorithms: ["HS256"],
+}); // give -> req.user._id
+
+// we can Create our middlewares directory and add this there
+exports.authMiddleware = (req, res, next) => {
+  const authUserId = req.user._id;
+  User.findOne({ _id: authUserId }).exec((err, user) => {
+    if (err || !user) {
+      return res.status(400).json({
+        error: "User not found",
+      });
+    }
+
+    req.profile = user; // adding in the request
+    next();
+  });
+};
+
+exports.adminMiddleware = (req, res, next) => {
+  const adminUserId = req.user._id;
+  User.findOne({ _id: adminUserId }).exec((err, user) => {
+    if (err || !user) {
+      return res.status(400).json({
+        error: "User not found",
+      });
+    }
+
+    if (user.role !== "admin") {
+      return res.status(400).json({ error: "Admin resource. Access Denied" });
+    }
+
+    req.profile = user; // adding in the request
+    next();
   });
 };

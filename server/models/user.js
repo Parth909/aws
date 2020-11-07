@@ -43,14 +43,24 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 ); // will automatically get **createdAt & updatedAt** fields in the db
 
+// query middleware
+// userSchema.pre("findOneAndUpdate", function (next) {
+//   const update = this.getUpdate();
+//   Object.keys(update)
+//     .filter((path) => userSchema.pathType(path) === "virtual")
+//     .forEach((name) => {
+//       userSchema.virtualpath(name).applySetters(update[name], this);
+//     });
+//   next();
+// });
+
 // virtual fields
 // We get some data from the FrontEnd we perform some Operations On It & Save it in the data or check with the database
 
 userSchema
   .virtual("password")
   .set(function (password) {
-    // Create termporary variable called _password
-
+    // temporary
     this._password = password;
 
     // generate salt

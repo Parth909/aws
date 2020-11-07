@@ -3,8 +3,9 @@
 1. Using **Next.js** with **React**
 2. Implementing **Infinite Scroll or Load on Scrolling** functionality
 3. Using Route 53
-4. Using Rich Text Area - Text Area with different styles available
-5. Activation of Users Account after confirming the email using AWS SES
+4. Resizing the image in the client - side and then uploading to avoid heavy images in the bucket(Like whatsapp)
+5. Using Rich Text Area - Text Area with different styles available
+6. Activation of Users Account after confirming the email using AWS SES
    1. Implement **JWT** based authentication system
    2. Before we save user to the DB check if user already exists
    3. Check if user's email is valid by sending verification token as a clickable link to user email
@@ -13,18 +14,18 @@
    6. **That token consists of name email password**
    7. Once again send that back to the server - Our server can decode as it has the secret
    8. This time we can save the user in the DB
-6. Forgot Password Email Reset
-7. Using Mass Email feature with the help of AWS - suppose my favorite categories are React & Node so when anyone Posts Link in that Category I Will receive an email.
-8. Keeping track of Clicks
-9. Taking care of SEO's
+7. Forgot Password Email Reset
+8. Using Mass Email feature with the help of AWS - suppose my favorite categories are React & Node so when anyone Posts Link in that Category I Will receive an email.
+9. Keeping track of Clicks
+10. Taking care of SEO's
 
 > Route 53 is a Domain Name System (DNS) service that performs **global server load balancing** by routing each request to the AWS region closest to the requester's location.
 
-12. Using EC2 for hosting
+11. Using EC2 for hosting
 
 > **ELBs** are intended to load balance **across EC2 instances in a 'single' region.** Whereas DNS load-balancing **(Route 53)** is intended to help balance **traffic 'across' regions.** ... Functionally, another difference is that DNS-based routing (e.g. Route 53) only changes the address that your clients' requests resolve to.
 
-13. Implementing Slim Loader that is in Youtube, Facebook
+12. Implementing Slim Loader that is in Youtube, Facebook
 
 #### Mini Features
 

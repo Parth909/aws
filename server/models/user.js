@@ -39,6 +39,13 @@ const userSchema = new mongoose.Schema(
       data: String,
       default: "",
     },
+    categories: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "Category",
+        required: true,
+      },
+    ],
   },
   { timestamps: true }
 ); // will automatically get **createdAt & updatedAt** fields in the db

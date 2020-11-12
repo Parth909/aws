@@ -88,6 +88,19 @@ export const isAuth = () => {
   }
 };
 
+// update the user in local storage when info updated
+export const updateUser = (user, next) => {
+  if (process.browser) {
+    if (localStorage.getItem("user")) {
+      let auth = JSON.parse(localStorage.getItem("user"));
+      auth = user;
+      localStorage.setItem("user", JSON.stringify(auth));
+      next();
+      // next refers to some callback *function* where this method is actually used
+    }
+  }
+};
+
 //logout
 export const logout = () => {
   removeCookie("token");

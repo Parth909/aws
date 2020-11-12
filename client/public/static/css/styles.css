@@ -7,8 +7,8 @@
   border-radius: 5px;
 }
 
-.nav .nav-item a {
-  color: white !important;
+.nav .nav-item a.custom-white {
+  color: white;
 }
 
 .nav-item a:hover {

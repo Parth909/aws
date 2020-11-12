@@ -14,6 +14,8 @@ const Register = () => {
     error: "",
     success: "",
     buttonText: "Register",
+    loadedCategories: [],
+    categories: [], // sent these to the backend
   });
 
   useEffect(() => {
@@ -22,7 +24,59 @@ const Register = () => {
     userPresent && Router.push("/");
   }, []);
 
-  const { name, email, password, error, success, buttonText } = state;
+  useEffect(() => {
+    loadCategories();
+  }, []);
+
+  const loadCategories = async () => {
+    const response = await axios.get(`${API}/categories`);
+    setState({ ...state, loadedCategories: response.data });
+  };
+
+  const {
+    name,
+    email,
+    password,
+    error,
+    success,
+    buttonText,
+    loadedCategories,
+    categories,
+  } = state;
+
+  // handle multiple checkboxes
+  const handleToggle = (catId) => (e) => {
+    // return the found index or -1
+    // if we get -1 add the category in the arr
+    // if we found index remove the category from the arr
+    const clickedCategoryId = categories.indexOf(catId);
+    const all = [...categories];
+
+    if (clickedCategoryId === -1) {
+      all.push(catId);
+    } else {
+      all.splice(clickedCategoryId, 1);
+    }
+
+    setState({ ...state, categories: all, success: "", error: "" });
+  };
+
+  // show categories - checkbox
+  const showCategories = () => {
+    return (
+      loadedCategories &&
+      loadedCategories.map((cat, i) => (
+        <li className="list-unstyled" key={cat._id}>
+          <input
+            type="checkbox"
+            onChange={handleToggle(cat._id)}
+            className="mr-2"
+          />
+          <label className="form-check-label">{cat.name}</label>
+        </li>
+      ))
+    );
+  };
 
   // variable for object keys are written in this fashion
   const handleChange = (name) => (e) => {
@@ -48,6 +102,7 @@ const Register = () => {
         name,
         email,
         password,
+        categories,
       });
 
       if (response) {
@@ -134,6 +189,12 @@ const Register = () => {
         />
       </div>
       <div className="form-group">
+        <label className="text-muted ml-4">Categories</label>
+        <ul style={{ maxHeight: "100px", overflowY: "scroll" }}>
+          {showCategories()}
+        </ul>
+      </div>
+      <div className="form-group">
         <button className="btn btn-outline-info">{buttonText}</button>
       </div>
     </form>
@@ -148,7 +209,7 @@ const Register = () => {
         <br />
         {registerForm()}
         <hr />
-        {JSON.stringify(state)}
+        {JSON.stringify(categories)}
       </div>
     </Layout>
   );

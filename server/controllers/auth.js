@@ -1,3 +1,4 @@
+const Link = require("../models/link");
 const User = require("../models/user");
 const AWS = require("aws-sdk");
 const jwt = require("jsonwebtoken"); // used for signing, verifying & decoding
@@ -20,7 +21,7 @@ AWS.config.update({
 const ses = new AWS.SES({ apiVersion: "2010-12-01" });
 
 exports.register = (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, categories } = req.body;
 
   // check if user exists in the db
 
@@ -34,7 +35,7 @@ exports.register = (req, res) => {
     // Generate JWT with name, email, password
 
     const token = jwt.sign(
-      { name, email, password },
+      { name, email, password, categories },
       process.env.JWT_ACCOUNT_ACTIVATION, // secret key while creating account
       {
         expiresIn: "10m", // acccount should be activated in 10 mins before token expires
@@ -74,11 +75,11 @@ exports.registerActivate = (req, res) => {
     }
     console.log("decoded info", decodedInfo);
 
-    const { name, email, password } = decodedInfo;
+    const { name, email, password, categories } = decodedInfo;
 
     const username = name + "#" + uid();
 
-    const newUser = new User({ username, name, email, password }); // already checked in above function if mail is taken
+    const newUser = new User({ username, name, email, password, categories }); // already checked in above function if mail is taken
     newUser.save((err, user) => {
       if (err) {
         return res
@@ -145,11 +146,12 @@ exports.authMiddleware = (req, res, next) => {
       });
     }
 
-    if (user.role === "admin") {
-      return res
-        .status(400)
-        .json({ error: "No need for Admin to access user routes" });
-    }
+    // We don't want to use totally different routes to perform same action so commenting
+    // if (user.role === "admin") {
+    //   return res
+    //     .status(400)
+    //     .json({ error: "No need for Admin to access user routes" });
+    // }
 
     req.profile = user; // adding in the request
     next();
@@ -328,4 +330,28 @@ exports.resetPassword = (req, res) => {
       }
     );
   }
+};
+
+exports.canUpdateDeleteLink = (req, res, next) => {
+  console.log(" - - - Running cantUpdateDeleteMiddleware - - - ");
+  const { id } = req.params;
+  User.findOne({ _id: req.user._id }).exec((err, user) => {
+    console.log(user.role);
+    Link.findOne({ _id: id }).exec((err, data) => {
+      if (err) {
+        return res.status(400).json({
+          error: "Can't update or delete the link",
+        });
+      }
+      let authorizedUser =
+        data.postedBy._id.toString() === req.user._id.toString();
+      if (authorizedUser || user.role === "admin") {
+        next();
+      } else {
+        return res.status(400).json({
+          error: "Can't update or delete the link",
+        });
+      }
+    });
+  });
 };

@@ -38,7 +38,13 @@ const Layout = ({ children }) => {
     <ul className="nav nav-tabs bg-info">
       <li className="nav-item">
         <Link href="/">
-          <a className="nav-link text-dark">Home</a>
+          <a className="nav-link custom-white">Home</a>
+        </Link>
+      </li>
+
+      <li className="nav-item">
+        <Link href="/user/link/create">
+          <a className="nav-link custom-white">Submit a link</a>
         </Link>
       </li>
 
@@ -46,12 +52,12 @@ const Layout = ({ children }) => {
         <div style={divstyle}>
           <div className="nav-item inline">
             <Link href="/login">
-              <a className="nav-link text-dark inline">Login</a>
+              <a className="nav-link inline custom-white">Login</a>
             </Link>
           </div>
           <div className="nav-item inline">
             <Link href="/register">
-              <a className="nav-link text-dark inline">Register</a>
+              <a className="nav-link inline custom-white">Register</a>
             </Link>
           </div>
         </div>
@@ -61,7 +67,7 @@ const Layout = ({ children }) => {
       {isAuth() && isAuth().role === "admin" && (
         <li className="nav-item ml-auto">
           <Link href="/admin">
-            <a className="nav-link text-dark">{isAuth().name}</a>
+            <a className="nav-link custom-white">{isAuth().name}</a>
           </Link>
         </li>
       )}
@@ -69,14 +75,14 @@ const Layout = ({ children }) => {
       {isAuth() && isAuth().role === "subscriber" && (
         <li className="nav-item ml-auto">
           <Link href="/user">
-            <a className="nav-link text-dark">{isAuth().name}</a>
+            <a className="nav-link custom-white">{isAuth().name}</a>
           </Link>
         </li>
       )}
 
       {isAuth() && (
         <li className="nav-item">
-          <a onClick={logout} className="nav-link text-dark">
+          <a onClick={logout} className="nav-link custom-white">
             Logout
           </a>
         </li>

@@ -21,16 +21,21 @@ mongoose
 //import routes
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
+const categoryRoutes = require("./routes/category");
+const linkRoutes = require("./routes/link");
 
 // app middlewares
 app.use(morgan("dev"));
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: "5mb", type: "application/json" }));
 // app.use(cors()); // to allow communication between different domains like FrontEnd Backend or basically between different Domains
 app.use(cors({ origin: process.env.CLIENT_URL }));
 
 // middlewares
 app.use("/api", authRoutes);
 app.use("/api", userRoutes);
+app.use("/api", categoryRoutes);
+app.use("/api", linkRoutes);
 
 const port = process.env.PORT;
 

@@ -8,17 +8,19 @@ const withAdmin = (Page) => {
   WithAdminUser.getInitialProps = async (context) => {
     const token = getCookie("token", context.req);
     let user = null;
+    let userLinks = null;
 
     if (token) {
       try {
         const response = await axios.get(`${API}/admin`, {
           headers: {
-            authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
         });
 
-        user = response.data;
+        user = response.data.user;
+        userLinks = response.data.links;
         console.log("Admin user", user);
       } catch (error) {
         console.log("Admin error", error.response.status);

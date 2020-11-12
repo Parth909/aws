@@ -11,6 +11,7 @@ const withUser = (Page) => {
   WithAuthUser.getInitialProps = async (context) => {
     const token = getCookie("token", context.req);
     let user = null;
+    let userLinks = null;
 
     if (token) {
       try {
@@ -21,7 +22,8 @@ const withUser = (Page) => {
           },
         });
 
-        user = response.data;
+        user = response.data.user;
+        userLinks = response.data.links;
       } catch (error) {
         if (error.response.status === 400) {
           user = null;
@@ -41,6 +43,7 @@ const withUser = (Page) => {
         ...(Page.getInitialProps ? await Page.getInitialProps(context) : {}), // getInitialProps return an object & we are spreading that object
         user,
         token,
+        userLinks,
       };
     }
   };

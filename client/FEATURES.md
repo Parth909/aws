@@ -3,7 +3,9 @@
 1. Using **Next.js** with **React**
 2. Implementing **Infinite Scroll or Load on Scrolling** functionality
 3. Using Route 53
-4. Resizing the image in the client - side and then uploading to avoid heavy images in the bucket(Like whatsapp)
+4. 1. Resizing the image in the client - side and then uploading to avoid heavy images in the bucket(Like whatsapp)
+   2. OR
+   3. Using FormData & uploading to S3 bucket
 5. Using Rich Text Area - Text Area with different styles available
 6. Activation of Users Account after confirming the email using AWS SES
    1. Implement **JWT** based authentication system
@@ -27,6 +29,8 @@
 
 12. Implementing Slim Loader that is in Youtube, Facebook
 
+13. For Every AWS SERVICE need to give the AWS SERVICE access to IAM user
+
 #### Mini Features
 
 1. Mongoose Schema automatically generates the createdAt and updatedAt in the user model
@@ -40,3 +44,14 @@
    - ....token will be used to allow the users to access protected routes
    - login / client
    - login form / show success|error msg / receive user & token from the server
+5. How to handle Radio Inputs & Checkboxes
+6. Deploy to AWS
+   - Push code to github
+   - **Allow EC2 access to IAM**
+   - Getting started with EC2
+   - **Create an ubuntu instance**
+   - **SHH into your instance**
+   - **Install Dependencies**
+   - **Pull you code onto the server from github**
+   - **Start your node application with pm2**
+   - **Configure NGINX to make your app (both frontend/backend) run on port 80**
